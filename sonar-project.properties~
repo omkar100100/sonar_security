@@ -1,0 +1,13 @@
+sonar.projectKey=Sonar_Security
+sonar.projectName=Sonar Security Fix Practise App
+sonar.projectVersion=1.0
+#sonar.sources=src
+sonar.sourceEncoding=UTF-8
+sonar.host.url = http://172.17.0.2:9000
+sonar.language=java
+sonar.sources=src/main/java
+sonar.java.binaries=target/classes
+sonar.junit.reportsPath=target/surefire-reports
+sonar.surefire.reportsPath=target/surefire-reports
+sonar.jacoco.reportPath=target/jacoco.exec
+sonar.java.coveragePlugin=jacoco
