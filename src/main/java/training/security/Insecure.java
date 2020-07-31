@@ -57,25 +57,7 @@ public class Insecure {
     }catch(SQLException ex) {
     	LOGGER.severe(ex.toString());
     }finally {
-    	 try {
-    		 if (resultSet!= null)
-    			 resultSet.close();
-    	 } catch (Exception e) {
-    		 LOGGER.severe(e.toString());	 
-    	 }
-    	 
-    	 try { 
-    		 if (pstmt != null)
-    			 pstmt.close();
-    	 } catch (Exception e) {
-    		 LOGGER.severe(e.toString());
-    	 }
-    	
-    	 try { 
-    		connection.close();
-    	 } catch (Exception e) {
-    		 LOGGER.severe(e.toString());
-    	 }
+    	closeResoruces(pstmt,resultSet,connection);
     }
     
     
@@ -95,6 +77,15 @@ public class Insecure {
 	  }catch(SQLException sqlEx) {
 		  LOGGER.severe(sqlEx.toString());
 	  }finally {
+		  closeResoruces(pstmt,rs,connection);
+	  }
+	  
+	  return userId;
+	  
+	  
+	}
+
+  private void closeResoruces(PreparedStatement stmt,ResultSet rs, Connection connection) {
 		  try {
 	    		 if (rs!=null)
 	    			 rs.close();
@@ -103,8 +94,8 @@ public class Insecure {
 	    	 }
 	    	 
 	    	 try { 
-	    		 if (pstmt != null)
-	    			 pstmt.close();
+	    		 if (stmt != null)
+	    			 stmt.close();
 	    	 } catch (Exception e) {
 	    		 LOGGER.severe(e.toString());
 	    	 }
@@ -114,13 +105,7 @@ public class Insecure {
 	    	 } catch (Exception e) {
 	    		 LOGGER.severe(e.toString());
 	    	 }
-	  }
-	  
-	  return userId;
-	  
-	  
-	}
-
+  }
 
   public void modResponse(HttpServletResponse response) {
     Cookie c = new Cookie("SECRET", "SECRET");
