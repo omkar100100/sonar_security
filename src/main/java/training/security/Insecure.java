@@ -12,7 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -85,7 +85,7 @@ public class Insecure {
   public String hotspotSQL(Connection connection, String user) throws SQLException  {
 	  PreparedStatement pstmt = null;
 	  ResultSet rs = null;
-	  String query = "select userid from users WHERE username=" ;
+	  String query = "select userid from users WHERE username= ? ";
 	  String userId = null;
 	  try {
 		  pstmt = connection.prepareStatement(query);
