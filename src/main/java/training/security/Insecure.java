@@ -41,7 +41,7 @@ public class Insecure {
     
   }
 
-  public String taintedSQL(HttpServletRequest request, Connection connection) throws Exception {
+  public String taintedSQL(HttpServletRequest request, Connection connection)  {
     String user = request.getParameter("user");
     
     String query = "SELECT userid FROM users WHERE username = ?";
@@ -82,7 +82,7 @@ public class Insecure {
     return userId;
   }
   
-  public String hotspotSQL(Connection connection, String user) throws SQLException  {
+  public String hotspotSQL(Connection connection, String user)   {
 	  PreparedStatement pstmt = null;
 	  ResultSet rs = null;
 	  String query = "select userid from users WHERE username= ? ";
