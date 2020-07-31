@@ -83,10 +83,42 @@ public class Insecure {
   }
   
   public String hotspotSQL(Connection connection, String user) throws SQLException  {
-	  Statement statement = null;
-	  statement = connection.createStatement();
-	  ResultSet rs = statement.executeQuery("select userid from users WHERE username=" + user);
-	  return rs.getString(0);
+	  PreparedStatement pstmt = null;
+	  ResultSet rs = null;
+	  String query = "select userid from users WHERE username=" ;
+	  String userId = null;
+	  try {
+		  pstmt = connection.prepareStatement(query);
+		  pstmt.setString(1, user);
+		  rs = pstmt.executeQuery();
+		  userId = rs.getString(1);
+	  }catch(SQLException sqlEx) {
+		  LOGGER.severe(sqlEx.toString());
+	  }finally {
+		  try {
+	    		 if (rs!=null)
+	    			 rs.close();
+	    	 } catch (Exception e) {
+	    		 LOGGER.severe(e.toString());	 
+	    	 }
+	    	 
+	    	 try { 
+	    		 if (pstmt != null)
+	    			 pstmt.close();
+	    	 } catch (Exception e) {
+	    		 LOGGER.severe(e.toString());
+	    	 }
+	    	
+	    	 try { 
+	    		connection.close();
+	    	 } catch (Exception e) {
+	    		 LOGGER.severe(e.toString());
+	    	 }
+	  }
+	  
+	  return userId;
+	  
+	  
 	}
 
 
