@@ -3,12 +3,15 @@ package training.security;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 import javax.servlet.http.Cookie;
@@ -16,30 +19,70 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.logging.Logger;
 
 public class Insecure {
 
+private final static Logger LOGGER = Logger.getLogger(Insecure.class.getName());
   public void badFunction(HttpServletRequest request) throws IOException {
+	  
+	
     String obj = request.getParameter("data");
     ObjectMapper mapper = new ObjectMapper();
     mapper.enableDefaultTyping();
-    String val = mapper.readValue(obj, String.class);
     File tempDir;
-    tempDir = File.createTempFile("", ".");
-    tempDir.delete();
-    tempDir.mkdir();
+    Path tempPath = Files.createTempDirectory("");
+    tempDir = tempPath.toFile();
+    
+    Files.delete(tempPath);
+   	tempDir.mkdir();
     Files.exists(Paths.get("/tmp/", obj));
+    
   }
 
   public String taintedSQL(HttpServletRequest request, Connection connection) throws Exception {
     String user = request.getParameter("user");
-    String query = "SELECT userid FROM users WHERE username = '" + user  + "'";
-    Statement statement = connection.createStatement();
-    ResultSet resultSet = statement.executeQuery(query);
-    return resultSet.getString(0);
+    
+    String query = "SELECT userid FROM users WHERE username = ?";
+    String userId =null;
+    PreparedStatement pstmt = null;
+    ResultSet resultSet = null;
+    try {
+    	pstmt = connection.prepareStatement(query);
+    	pstmt.setString(1,user);
+    	resultSet = pstmt.executeQuery();
+    	userId = resultSet.getString(1);
+        
+    }catch(SQLException ex) {
+    	LOGGER.severe(ex.toString());
+    }finally {
+    	 try {
+    		 if (resultSet!= null)
+    			 resultSet.close();
+    	 } catch (Exception e) {
+    		 LOGGER.severe(e.toString());	 
+    	 };
+    	 
+    	 try { 
+    		 if (pstmt != null)
+    			 pstmt.close();
+    	 } catch (Exception e) {
+    		 LOGGER.severe(e.toString());
+    	 };
+    	
+    	 try { 
+    		 if (connection != null)
+    			 connection.close();
+    	 } catch (Exception e) {
+    		 LOGGER.severe(e.toString());
+    	 };
+    }
+    
+    
+    return userId;
   }
   
-  public String hotspotSQL(Connection connection, String user) throws Exception {
+  public String hotspotSQL(Connection connection, String user) throws SQLException  {
 	  Statement statement = null;
 	  statement = connection.createStatement();
 	  ResultSet rs = statement.executeQuery("select userid from users WHERE username=" + user);
