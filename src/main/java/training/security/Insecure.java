@@ -22,9 +22,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.logging.Logger;
 
 public class Insecure {
-
-private final static Logger LOGGER = Logger.getLogger(Insecure.class.getName());
-  public void badFunction(HttpServletRequest request) throws IOException {
+  
+	private static final Logger LOGGER = Logger.getLogger(Insecure.class.getName());
+   
+   public void badFunction(HttpServletRequest request) throws IOException {
 	  
 	
     String obj = request.getParameter("data");
@@ -61,21 +62,20 @@ private final static Logger LOGGER = Logger.getLogger(Insecure.class.getName());
     			 resultSet.close();
     	 } catch (Exception e) {
     		 LOGGER.severe(e.toString());	 
-    	 };
+    	 }
     	 
     	 try { 
     		 if (pstmt != null)
     			 pstmt.close();
     	 } catch (Exception e) {
     		 LOGGER.severe(e.toString());
-    	 };
+    	 }
     	
     	 try { 
-    		 if (connection != null)
-    			 connection.close();
+    		connection.close();
     	 } catch (Exception e) {
     		 LOGGER.severe(e.toString());
-    	 };
+    	 }
     }
     
     
