@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 
 public class Insecure {
   
-	private static final Logger LOGGER = Logger.getLogger(Insecure.class.getName());
+   private static final Logger LOGGER = Logger.getLogger(Insecure.class.getName());
    
    public void badFunction(HttpServletRequest request) throws IOException {
 	  
@@ -87,15 +87,17 @@ public class Insecure {
 
   private void closeResoruces(PreparedStatement stmt,ResultSet rs, Connection connection) {
 		  try {
-	    		 if (rs!=null)
+	    		 if (rs!=null){
 	    			 rs.close();
+			 }
 	    	 } catch (Exception e) {
 	    		 LOGGER.severe(e.toString());	 
 	    	 }
 	    	 
 	    	 try { 
-	    		 if (stmt != null)
+	    		 if (stmt != null){
 	    			 stmt.close();
+			}
 	    	 } catch (Exception e) {
 	    		 LOGGER.severe(e.toString());
 	    	 }
