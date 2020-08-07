@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 
 public class Insecure {
   
-	private static final Logger LOGGER = Logger.getLogger(Insecure.class.getName());
+   private static final Logger LOGGER = Logger.getLogger(Insecure.class.getName());
    
    public void badFunction(HttpServletRequest request) throws IOException {
 	  
