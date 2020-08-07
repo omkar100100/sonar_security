@@ -27,7 +27,7 @@ public class Insecure {
 	
     String obj = request.getParameter("data");
     ObjectMapper mapper = new ObjectMapper();
-    mapper.enableDefaultTyping();
+    mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
     File tempDir;
     Path tempPath = Files.createTempDirectory("");
     tempDir = tempPath.toFile();
