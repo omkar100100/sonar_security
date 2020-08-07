@@ -12,12 +12,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.logging.Logger;
 
@@ -30,7 +27,7 @@ public class Insecure {
 	
     String obj = request.getParameter("data");
     ObjectMapper mapper = new ObjectMapper();
-    mapper.enableDefaultTyping();
+    mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
     File tempDir;
     Path tempPath = Files.createTempDirectory("");
     tempDir = tempPath.toFile();
